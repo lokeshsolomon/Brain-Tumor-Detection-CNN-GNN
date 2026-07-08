@@ -1,0 +1,26 @@
+# Core deep learning
+torch>=2.1
+torchvision>=0.16
+
+# CNN backbones (EfficientNet, ResNet, etc.)
+timm>=0.9
+
+# Graph neural networks (GAT / GCN)
+torch-geometric>=2.4
+
+# Data handling & metrics
+numpy
+scikit-learn
+pandas
+
+# Visualization
+matplotlib
+seaborn
+Pillow
+
+# Notebook utilities
+tqdm
+jupyter
+
+# Web application
+flask

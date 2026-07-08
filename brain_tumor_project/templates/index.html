@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brain Tumor Detection — CNN + GAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> NeuroGraph</div>
+    <div class="tag">CNN + GAT &middot; Grad-CAM</div>
+  </div>
+
+  <div class="page">
+
+    <div class="eyebrow">MRI Analysis</div>
+    <h1>Upload a brain MRI scan<br>for <span>tumor classification</span></h1>
+    <p class="sub">
+      The model extracts spatial features with a CNN, builds a 7&times;7 patch
+      graph from the feature map, and classifies it with a Graph Attention
+      Network. Results include the predicted class, a confidence score for
+      each category, and a Grad-CAM heatmap of the regions that drove the
+      decision.
+    </p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="upload-form">
+      <div class="upload-card">
+        <label class="dropzone" id="dropzone">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16V4M12 4l-4 4M12 4l4 4"/>
+              <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+            </svg>
+          </div>
+          <div class="title">Drop an MRI image here</div>
+          <div class="hint">or click to browse &middot; PNG / JPG &middot; up to 10MB</div>
+          <div class="filename" id="filename"></div>
+          <input type="file" name="image" id="file-input" accept=".png,.jpg,.jpeg,.bmp" required>
+        </label>
+        <div class="upload-actions">
+          <button type="submit" class="btn">Analyze Scan</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h3 class="title">CNN Feature Extraction</h3>
+        <p class="desc">EfficientNet-B0 extracts a spatial feature map from the MRI scan.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h3 class="title">Patch Graph + GAT</h3>
+        <p class="desc">The feature map becomes a 7&times;7 patch graph, classified by a Graph Attention Network.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h3 class="title">Prediction + Grad-CAM</h3>
+        <p class="desc">You get the predicted class, confidence scores, and a heatmap of influential regions.</p>
+      </div>
+    </div>
+
+    <footer>4 CLASSES &middot; GLIOMA &middot; MENINGIOMA &middot; NOTUMOR &middot; PITUITARY</footer>
+  </div>
+
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const filenameEl = document.getElementById('filename');
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      filenameEl.textContent = fileInput.files[0].name;
+      filenameEl.style.display = 'block';
+    }
+  });
+
+  ['dragenter', 'dragover'].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    })
+  );
+
+  ['dragleave', 'drop'].forEach(evt =>
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+    })
+  );
+
+  dropzone.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      filenameEl.textContent = files[0].name;
+      filenameEl.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>

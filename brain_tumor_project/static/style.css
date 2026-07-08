@@ -1,0 +1,466 @@
+/* ==========================================================================
+   Brain Tumor Detection — CNN + GAT
+   Shared stylesheet for index.html and result.html
+   ========================================================================== */
+
+:root{
+  --bg:        #0b1320;
+  --panel:     #121d30;
+  --panel-2:   #16243a;
+  --line:      #233354;
+  --text:      #e7ecf3;
+  --muted:     #84909f;
+  --teal:      #4fd1c5;
+  --teal-dim:  rgba(79,209,197,0.14);
+  --amber:     #f2b134;
+  --amber-dim: rgba(242,177,52,0.14);
+}
+
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 16% 6%, rgba(79,209,197,0.07), transparent 40%),
+    radial-gradient(circle at 88% 94%, rgba(242,177,52,0.06), transparent 40%);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+a{ color: var(--teal); text-decoration: none; }
+
+/* ---------------- Top bar ---------------- */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 22px 5vw;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.brand .dot{
+  width: 10px; height:10px; border-radius:50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px var(--teal-dim);
+}
+
+.topbar .tag{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------------- Layout shells ---------------- */
+.page{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 56px 20px 90px;
+}
+
+.eyebrow{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 14px;
+}
+
+h1{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 4.5vw, 40px);
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
+}
+
+h1 span{ color: var(--amber); }
+
+.sub{
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 560px;
+  line-height: 1.65;
+  margin: 0 0 40px;
+}
+
+/* ---------------- Flash messages ---------------- */
+.flash{
+  background: var(--amber-dim);
+  border: 1px solid rgba(242,177,52,0.4);
+  color: var(--amber);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* ---------------- Upload dropzone ---------------- */
+.upload-card{
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 8px;
+}
+
+.dropzone{
+  position: relative;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  padding: 56px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(79,209,197,0.05) 0 1px, transparent 1px 14.28%),
+    repeating-linear-gradient(90deg, rgba(79,209,197,0.05) 0 1px, transparent 1px 14.28%);
+}
+
+.dropzone.dragover, .dropzone:hover{
+  border-color: var(--teal);
+  background-color: rgba(79,209,197,0.05);
+}
+
+.dropzone input[type="file"]{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dropzone .icon{
+  width: 52px; height: 52px;
+  margin: 0 auto 18px;
+  border-radius: 12px;
+  background: var(--teal-dim);
+  display:flex; align-items:center; justify-content:center;
+}
+
+.dropzone .icon svg{ width: 26px; height: 26px; stroke: var(--teal); }
+
+.dropzone .title{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.dropzone .hint{
+  color: var(--muted);
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.dropzone .filename{
+  margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--teal);
+  display: none;
+}
+
+.upload-actions{
+  display:flex;
+  justify-content: flex-end;
+  padding: 18px 12px 12px;
+}
+
+.btn{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: #08131a;
+  background: var(--teal);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(79,209,197,0.25);
+}
+
+.btn.secondary{
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn.secondary:hover{
+  border-color: var(--teal);
+  box-shadow: none;
+}
+
+/* ---------------- How it works ---------------- */
+.steps{
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.step{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.step .num{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+.step .title{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15.5px;
+  margin: 0 0 6px;
+}
+
+.step .desc{
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 720px){
+  .steps{ grid-template-columns: 1fr; }
+}
+
+/* ---------------- Result page ---------------- */
+.result-grid{
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 820px){
+  .result-grid{ grid-template-columns: 1fr; }
+}
+
+.image-card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.image-card .label{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.image-card img{
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+  border: 1px solid var(--line);
+}
+
+.image-toggle{
+  display:flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.image-toggle button{
+  flex:1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.image-toggle button.active{
+  color: var(--teal);
+  border-color: var(--teal);
+}
+
+.scan-img{ position: relative; overflow: hidden; border-radius: 10px; }
+.scan-img img{ display:block; }
+.scan-img::after{
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  box-shadow: 0 0 12px var(--teal);
+  animation: scan 2.6s ease-in-out infinite;
+}
+
+@keyframes scan{
+  0%   { top: 0%; opacity: 0.9; }
+  50%  { top: 100%; opacity: 0.4; }
+  100% { top: 0%; opacity: 0.9; }
+}
+
+/* ---------------- Verdict card ---------------- */
+.verdict-card{
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.verdict-badge{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.verdict-badge.present{
+  color: var(--amber);
+  background: var(--amber-dim);
+  border: 1px solid rgba(242,177,52,0.35);
+}
+
+.verdict-badge.absent{
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(79,209,197,0.35);
+}
+
+.verdict-card h2{
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  margin: 0 0 8px;
+}
+
+.verdict-card .desc{
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.confidence-row{
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.confidence-row .value{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  color: var(--teal);
+}
+
+.confidence-row .label{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------------- Probability bars ---------------- */
+.prob-list{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prob-row .meta{
+  display:flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.prob-row .meta .name{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+}
+
+.prob-row .meta .pct{
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+}
+
+.prob-row.top .meta .pct{ color: var(--teal); }
+
+.bar-track{
+  height: 8px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.bar-fill{
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(79,209,197,0.5), var(--teal));
+  width: 0%;
+  animation: grow 1s ease-out forwards;
+}
+
+.prob-row.top .bar-fill{
+  background: linear-gradient(90deg, rgba(242,177,52,0.5), var(--amber));
+}
+
+@keyframes grow{
+  from{ width: 0%; }
+}
+
+.actions{
+  margin-top: 28px;
+  display:flex;
+  gap: 12px;
+}
+
+footer{
+  text-align:center;
+  margin-top: 64px;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .bar-fill{ animation: none; width: var(--final-width, 0%); }
+  .scan-img::after{ animation: none; }
+}

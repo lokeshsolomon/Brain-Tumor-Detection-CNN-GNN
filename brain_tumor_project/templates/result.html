@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prediction Result — Brain Tumor Detection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> NeuroGraph</div>
+    <div class="tag">CNN + GAT &middot; Grad-CAM</div>
+  </div>
+
+  <div class="page">
+
+    <div class="eyebrow">Analysis Result</div>
+    <h1>Scan classified as<br><span>{{ predicted_class }}</span></h1>
+    <p class="sub">
+      The heatmap shows the regions the model relied on most when making
+      this prediction. Brighter (red/yellow) areas contributed more strongly
+      to the predicted class.
+    </p>
+
+    <div class="result-grid">
+
+      <!-- Image panel -->
+      <div class="image-card">
+        <div class="label">MRI Scan</div>
+        <div class="scan-img">
+          <img id="display-image" src="{{ url_for('static', filename=original_image) }}" alt="Uploaded MRI scan">
+        </div>
+        <div class="image-toggle">
+          <button type="button" class="active" data-src="{{ url_for('static', filename=original_image) }}" id="btn-original">Original</button>
+          <button type="button" data-src="{{ url_for('static', filename=gradcam_image) }}" id="btn-gradcam">Grad-CAM</button>
+        </div>
+      </div>
+
+      <!-- Verdict panel -->
+      <div class="verdict-card">
+        {% if tumor_present %}
+          <div class="verdict-badge present">Tumor Detected</div>
+        {% else %}
+          <div class="verdict-badge absent">No Tumor Detected</div>
+        {% endif %}
+
+        <h2>{{ predicted_class }}</h2>
+        <p class="desc">{{ description }}</p>
+
+        <div class="confidence-row">
+          <span class="value">{{ confidence }}%</span>
+          <span class="label">Confidence</span>
+        </div>
+
+        <div class="prob-list">
+          {% for p in class_probs %}
+            <div class="prob-row {% if loop.first %}top{% endif %}">
+              <div class="meta">
+                <span class="name">{{ p.name }}</span>
+                <span class="pct">{{ p.value }}%</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" style="--final-width: {{ p.value }}%; animation-duration: 1s;" data-width="{{ p.value }}"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="actions">
+          <a href="{{ url_for('index') }}" class="btn">Analyze Another Scan</a>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>EFFICIENTNET-B0 &middot; 3-LAYER GAT &middot; GRAD-CAM EXPLAINABILITY</footer>
+  </div>
+
+<script>
+  // Set bar widths via JS so the CSS grow animation runs from 0
+  document.querySelectorAll('.bar-fill').forEach(bar => {
+    const w = bar.getAttribute('data-width');
+    requestAnimationFrame(() => { bar.style.width = w + '%'; });
+  });
+
+  // Toggle between original and Grad-CAM images
+  const displayImage = document.getElementById('display-image');
+  const btnOriginal = document.getElementById('btn-original');
+  const btnGradcam = document.getElementById('btn-gradcam');
+
+  function setActive(btn) {
+    [btnOriginal, btnGradcam].forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    displayImage.src = btn.getAttribute('data-src');
+  }
+
+  btnOriginal.addEventListener('click', () => setActive(btnOriginal));
+  btnGradcam.addEventListener('click', () => setActive(btnGradcam));
+</script>
+
+</body>
+</html>
